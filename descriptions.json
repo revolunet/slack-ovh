@@ -1,5 +1,10 @@
 {
   "openacademie": "Des solutions numériques pour l’administration scolaire, openacademie.beta.gouv.fr",
   "incubateur": "Tous les membres ayant un contrat en cours sur beta.gouv.fr/communaute",
-  "alumni": "Tous les membres de la partie \"Alumni\" de beta.gouv.fr/communaute"
+  "alumni": "Tous les membres de la partie \"Alumni\" de beta.gouv.fr/communaute",
+  "alpha": "La formation à destination des acteurs de l'innovation du secteur public",
+  "contact": "Toutes demandes entrantes. Stratégie. Pour les membres volontaires",
+  "compta": "Achats, facturation, refacturation...",
+  "recrutement": "Candidatures",
+  "sgmap": "Rares éléments administratifs nécessitant un lien contractuel (fiches de paie, gestion des ordres de mission…)."
 }
