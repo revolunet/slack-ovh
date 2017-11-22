@@ -43,7 +43,27 @@ function addSpecialRedirections(list) {
   return list.concat(specialRedirections)
 }
 
-function list(res) {
+function list(res, mailingList) {
+  if (mailingList) {
+
+    if (specialRedirections.indexOf(mailingList) >= 0) {
+      // Should list all redirections with { from: mailingList }
+      return sendError(res)('Action impossible pour le moment.')
+    }
+
+    return ovh.requestPromised('GET', `/email/domain/beta.gouv.fr/mailingList/${mailingList}/subscriber`)
+        .then(list => {
+          return list.reduce((acc, item) => {
+            return acc + `- ${item}\n`
+          }, `Personnes inscrites à ${mailingList}:\n`)
+        })
+        .then(text => res.send({
+          text,
+          mrkdwn: true,
+          response_type: 'ephemeral'
+        }))
+  }
+
   return ovh.requestPromised('GET', `/email/domain/beta.gouv.fr/mailingList`)
     .then(addSpecialRedirections)
     .then(toText)
@@ -57,10 +77,10 @@ function list(res) {
 function help(res) {
   return res.send({
     text: `Commandes disponibles:\n
-    \t*list*: \`/emails list\`\t\tliste des listes de diffusions existantes
-    \t*list*: \`/emails list nomdelaliste\`\t\tliste des personnes dans la liste nomdelaliste
-    \t*join*: \`/emails join nomdelaliste nom.prenom@beta.gouv.fr\`\trejoindre la liste nomdelaliste
-    \t*leave*: \`/emails leave nomdelaliste nom.prenom@beta.gouv.fr\`\tquitter la liste nomdelaliste
+    \t- \`/emails list\`\t\tliste des listes de diffusions existantes
+    \t- \`/emails list nomdelaliste\`\t\tliste des personnes dans la liste nomdelaliste
+    \t- \`/emails join nomdelaliste nom.prenom@beta.gouv.fr\`\trejoindre la liste nomdelaliste
+    \t- \`/emails leave nomdelaliste nom.prenom@beta.gouv.fr\`\tquitter la liste nomdelaliste
 
     Plus d'infos sur https://github.com/sgmap/slack-ovh`,
     mrkdwn: true,
