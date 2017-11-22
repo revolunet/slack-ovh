@@ -17,8 +17,7 @@ function sendOk(res, mailingList, email) {
   return () => {
     return res.send({
       text: `Inscription de *${email}* à la liste *${mailingList}* réussie.`,
-      mrkdwn: true,
-      response_type: 'ephemeral'
+      mrkdwn: true
     })
   }
 }
@@ -140,8 +139,7 @@ function leave(res, mailingList, email) {
       .then(_ => {
         return res.send({
           text: `Suppression de la redirection de *${mailingList}* à *${email}* réussie.`,
-          mrkdwn: true,
-          response_type: 'ephemeral'
+          mrkdwn: true
         })
       })
       .catch(sendError(res))
@@ -151,8 +149,7 @@ function leave(res, mailingList, email) {
       .then(_ => {
         return res.send({
           text: `Désinscription de *${email}* à la liste *${mailingList}* réussie.`,
-          mrkdwn: true,
-          response_type: 'ephemeral'
+          mrkdwn: true
         })
       })
       .catch(sendError(res))
