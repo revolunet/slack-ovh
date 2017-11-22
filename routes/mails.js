@@ -3,6 +3,7 @@ const descriptions = require('../descriptions')
 const ovh = require('ovh')(config.ovh)
 const express = require('express')
 const router = express.Router()
+const Promise = require('bluebird')
 const verification = require('../middlewares/slack')
 
 const specialRedirections = ['contact']
@@ -56,9 +57,10 @@ function list(res) {
 function help(res) {
   return res.send({
     text: `Commandes disponibles:\n
-    \t\`/emails list\`\t\tliste des listes de diffusions existantes
-    \t\`/emails join <liste> <email>\`\trejoindre une liste
-    \t\`/emails leave <liste> <email>\`\tquitter une liste
+    \t*list*: \`/emails list\`\t\tliste des listes de diffusions existantes
+    \t*list*: \`/emails list nomdelaliste\`\t\tliste des personnes dans la liste nomdelaliste
+    \t*join*: \`/emails join nomdelaliste nom.prenom@beta.gouv.fr\`\trejoindre la liste nomdelaliste
+    \t*leave*: \`/emails leave nomdelaliste nom.prenom@beta.gouv.fr\`\tquitter la liste nomdelaliste
 
     Plus d'infos sur https://github.com/sgmap/slack-ovh`,
     mrkdwn: true,
@@ -84,19 +86,45 @@ function join(res, mailingList, email) {
   }
 }
 
-function leave(res, mailingList, email) {
-  if (specialRedirections.indexOf(mailingList) >= 0) {
-    return res.send({
-      text: `Cette commande ne fonctionne pas encore, contactez #incubateur-ops pour obtenir de l'aide`,
-      mrkdwn: true,
-      response_type: 'ephemeral'
+function getAllRedirections() {
+  return ovh.requestPromised('GET', `/email/domain/beta.gouv.fr/redirection`)
+  .then(redirectionIds => {
+    const mapper = id => ovh.requestPromised('GET', `/email/domain/beta.gouv.fr/redirection/${id}`)
+
+    return Promise.map(redirectionIds, mapper)
+  })
+}
+
+function findExistingRedirection(email, mailingList) {
+  return (list) => {
+    const found = list.find(redirection => {
+      return redirection.from === mailingList && redirection.to === email
     })
 
-    // Find existing redirection
-    // const redirection = {id: null} //TODO
-    // Remove redirection
-    // return ovh.requestPromised('DELETE', `/email/domain/beta.gouv.fr/redirection/${redirection.id}`)
-    //   .then(sendOk(res, mailingList, email))
+    if (!found) {
+      throw {message: `Impossible de trouver la redirection de ${email} vers ${mailingList}`}
+    }
+  }
+}
+
+function removeRedirection(redirection) {
+  return ovh.requestPromised('DELETE', `/email/domain/${domain}/redirection/${redirection.id}`)
+}
+
+
+function leave(res, mailingList, email) {
+  if (specialRedirections.indexOf(mailingList) >= 0) {
+    getAllRedirections()
+      .then(findExistingRedirection(email, mailingList))
+      .then(removeRedirection)
+      .then(_ => {
+        return res.send({
+          text: `Suppression de la redirection de *${mailingList}* à *${email}* réussie.`,
+          mrkdwn: true,
+          response_type: 'ephemeral'
+        })
+      })
+      .catch(sendError(res))
   } else {
     // Unsubscribe from mailing-list
     return ovh.requestPromised('DELETE', `/email/domain/beta.gouv.fr/mailingList/${mailingList}/subscriber/${email}`)
@@ -124,7 +152,7 @@ router.post('/', verification, function(req, res, next) {
     case 'leave':
       return leave(res, mailingList, email)
     case 'list':
-      return list(res)
+      return list(res, mailingList)
     default:
       return help(res)
   }
