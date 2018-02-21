@@ -7,7 +7,14 @@ const Promise = require('bluebird')
 const verification = require('../middlewares/slack')
 const messages = require('../lib/messages')
 
-const specialRedirections = ['contact']
+const specialRedirections = [
+  {short: 'contact', full: 'contact@beta.gouv.fr'},
+  {short: 'contact@openacademie', full: 'contact@openacademie.beta.gouv.fr'}
+]
+
+shortSpecialRedirections = specialRedirections.map(item => item.short)
+fullSpecialRedirections = specialRedirections.map(item => item.full)
+
 const helpMessage = `Commandes disponibles:\n
   \t- \`/emails list\`\t\tliste des listes de diffusions existantes
   \t- \`/emails list nomdelaliste\`\t\tliste des personnes dans la liste nomdelaliste
@@ -29,14 +36,26 @@ function buildLongDescription(list) {
 
 function getMailingLists() {
   return ovh.requestPromised('GET', `/email/domain/beta.gouv.fr/mailingList`)
-    .then(list => list.concat(specialRedirections))
+    .then(list => list.concat(shortSpecialRedirections))
     .then(buildLongDescription)
 }
 
+function filterFromRedirections(mailingList) {
+  return (list) => {
+    const fullRedirection = specialRedirections.find(item => item.short === mailingList).full
+    return list.filter(item => item.from === fullRedirection)
+  }
+}
+
 function getSubscribers(mailingList) {
-  if (specialRedirections.indexOf(mailingList) >= 0) {
-    // Should list all redirections with { from: mailingList }
-    throw {message: `Action impossible pour le moment`}
+  if (shortSpecialRedirections.indexOf(mailingList) >= 0) {
+    return getAllRedirections()
+      .then(filterFromRedirections(mailingList))
+      .then(list => {
+        return list.reduce((acc, item) => {
+          return acc + `- ${item.to}\n`
+        }, `Personnes inscrites à ${mailingList}:\n`)
+      })
   }
 
   return ovh.requestPromised('GET', `/email/domain/beta.gouv.fr/mailingList/${mailingList}/subscriber`)
@@ -93,7 +112,7 @@ function help(res) {
 function join(res, mailingList, email) {
   let subscribePromise
 
-  if (specialRedirections.indexOf(mailingList) >= 0) {
+  if (shortSpecialRedirections.indexOf(mailingList) >= 0) {
     // Add redirection
     subscribePromise = ovh.requestPromised('POST', `/email/domain/beta.gouv.fr/redirection`, {
       from: `${mailingList}@beta.gouv.fr`,
@@ -115,7 +134,7 @@ function join(res, mailingList, email) {
 function leave(res, mailingList, email) {
   let leavePromise
 
-  if (specialRedirections.indexOf(mailingList) >= 0) {
+  if (shortSpecialRedirections.indexOf(mailingList) >= 0) {
     // Remove redirection
     leavePromise = getAllRedirections()
       .then(findExistingRedirection(email, mailingList))
