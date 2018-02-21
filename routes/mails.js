@@ -113,10 +113,11 @@ function help(res) {
 function join(res, mailingList, email) {
   let subscribePromise
 
-  if (shortSpecialRedirections.indexOf(mailingList) >= 0) {
+  const isSpecial = specialRedirections.find(item => item.short === mailingList)
+  if (isSpecial) {
     // Add redirection
     subscribePromise = ovh.requestPromised('POST', `/email/domain/beta.gouv.fr/redirection`, {
-      from: `${mailingList}@beta.gouv.fr`,
+      from: isSpecial.full,
       to: email,
       localCopy: false
     })
