@@ -10,7 +10,9 @@ const messages = require('../lib/messages')
 const specialRedirections = [
   {short: 'contact', full: 'contact@beta.gouv.fr'},
   {short: 'contact@openacademie', full: 'contact@openacademie.beta.gouv.fr'},
-  {short: 'contact@transport', full: 'contact@transport.beta.gouv.fr'}
+  {short: 'contact@transport', full: 'contact@transport.beta.gouv.fr'},
+  {short: 'contact@aplus', full: 'contact@aplus.beta.gouv.fr'},
+  {short: 'contact@locatio', full: 'contact@locatio.beta.gouv.fr'}
 ]
 
 shortSpecialRedirections = specialRedirections.map(item => item.short)
