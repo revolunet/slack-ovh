@@ -1,5 +1,6 @@
 const config = require('../config')
 const descriptions = require('../descriptions')
+const redirections = require('../redirections')
 const ovh = require('ovh')(config.ovh)
 const express = require('express')
 const router = express.Router()
@@ -7,27 +8,19 @@ const Promise = require('bluebird')
 const verification = require('../middlewares/slack')
 const messages = require('../lib/messages')
 
-const specialRedirections = [
-  {short: 'contact', full: 'contact@beta.gouv.fr'},
-  {short: 'contact@openacademie', full: 'contact@openacademie.beta.gouv.fr'},
-  {short: 'contact@transport', full: 'contact@transport.beta.gouv.fr'},
-  {short: 'contact@aplus', full: 'contact@aplus.beta.gouv.fr'},
-  {short: 'contact@locatio', full: 'contact@locatio.beta.gouv.fr'}
-]
+const shortRedirections = redirections.map(item => item.short)
 
-shortSpecialRedirections = specialRedirections.map(item => item.short)
-fullSpecialRedirections = specialRedirections.map(item => item.full)
-
-const helpMessage = `Commandes disponibles:\n
+const helpMessage = `Commandes disponibles:
   \t- \`/emails list\`\t\tliste des listes de diffusions existantes
   \t- \`/emails list nomdelaliste\`\t\tliste des personnes dans la liste nomdelaliste
   \t- \`/emails join nomdelaliste nom.prenom@beta.gouv.fr\`\trejoindre la liste nomdelaliste
   \t- \`/emails leave nomdelaliste nom.prenom@beta.gouv.fr\`\tquitter la liste nomdelaliste
 
-  Plus d'infos sur https://github.com/sgmap/slack-ovh`
+  Ajoutez votre liste contact ici 👉 https://github.com/betagouv/slack-ovh/blob/master/redirections.json
+  Plus d'infos sur https://github.com/betagouv/slack-ovh`
 
 function fillDescription(id) {
-  const description = descriptions[id] || 'Ajoutez votre description ici 👉 https://github.com/sgmap/slack-ovh/blob/master/descriptions.json'
+  const description = descriptions[id] || 'Ajoutez votre description ici 👉 https://github.com/betagouv/slack-ovh/blob/master/descriptions.json'
   return `*${id}*: ${description}`
 }
 
@@ -39,19 +32,19 @@ function buildLongDescription(list) {
 
 function getMailingLists() {
   return ovh.requestPromised('GET', `/email/domain/beta.gouv.fr/mailingList`)
-    .then(list => list.concat(shortSpecialRedirections))
+    .then(list => list.concat(shortRedirections))
     .then(buildLongDescription)
 }
 
 function filterFromRedirections(mailingList) {
   return (list) => {
-    const fullRedirection = specialRedirections.find(item => item.short === mailingList).full
+    const fullRedirection = redirections.find(item => item.short === mailingList).full
     return list.filter(item => item.from === fullRedirection)
   }
 }
 
 function getSubscribers(mailingList) {
-  if (shortSpecialRedirections.indexOf(mailingList) >= 0) {
+  if (shortRedirections.indexOf(mailingList) >= 0) {
     return getAllRedirections()
       .then(filterFromRedirections(mailingList))
       .then(list => {
@@ -115,7 +108,7 @@ function help(res) {
 function join(res, mailingList, email) {
   let subscribePromise
 
-  const isSpecial = specialRedirections.find(item => item.short === mailingList)
+  const isSpecial = redirections.find(item => item.short === mailingList)
   if (isSpecial) {
     // Add redirection
     subscribePromise = ovh.requestPromised('POST', `/email/domain/beta.gouv.fr/redirection`, {
@@ -138,7 +131,7 @@ function join(res, mailingList, email) {
 function leave(res, mailingList, email) {
   let leavePromise
 
-  if (shortSpecialRedirections.indexOf(mailingList) >= 0) {
+  if (shortRedirections.indexOf(mailingList) >= 0) {
     // Remove redirection
     leavePromise = getAllRedirections()
       .then(findExistingRedirection(email, mailingList))
