@@ -7,9 +7,9 @@
   "compta": "Achats, facturation, refacturation...",
   "recrutement": "Candidatures",
   "sgmap": "Rares éléments administratifs nécessitant un lien contractuel (fiches de paie, gestion des ordres de mission…).",
-  "contact@beta": "Liste des contacts sur beta.gouv.fr",
-  "contact@openacademie": "Des solutions numériques pour l’administration scolaire, openacademie.beta.gouv.fr",
-  "contact@transport": "Liste des redirections sur transport.beta.gouv.fr",
-  "contact@aplus": "Liste des redirections sur contact@aplus.beta.gouv.fr",
-  "contact@locatio": "Liste des redirections sur contact@locatio.beta.gouv.fr"
+  "contact@beta.gouv.fr": "Liste des contacts sur beta.gouv.fr",
+  "contact@openacademie.beta.gouv.fr": "Des solutions numériques pour l’administration scolaire, openacademie.beta.gouv.fr",
+  "contact@transport.beta.gouv.fr": "Liste des redirections sur transport.beta.gouv.fr",
+  "contact@aplus.beta.gouv.fr": "Liste des redirections sur contact@aplus.beta.gouv.fr",
+  "contact@locatio.beta.gouv.fr": "Liste des redirections sur contact@locatio.beta.gouv.fr"
 }

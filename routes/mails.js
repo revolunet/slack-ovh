@@ -8,8 +8,6 @@ const Promise = require('bluebird')
 const verification = require('../middlewares/slack')
 const messages = require('../lib/messages')
 
-const shortRedirections = redirections.map(item => item.short)
-
 const helpMessage = `Commandes disponibles:
   \t- \`/emails list\`\t\tliste des listes de diffusions existantes
   \t- \`/emails list nomdelaliste\`\t\tliste des personnes dans la liste nomdelaliste
@@ -32,19 +30,18 @@ function buildLongDescription(list) {
 
 function getMailingLists() {
   return ovh.requestPromised('GET', `/email/domain/beta.gouv.fr/mailingList`)
-    .then(list => list.concat(shortRedirections))
+    .then(list => list.concat(redirections))
     .then(buildLongDescription)
 }
 
-function filterFromRedirections(mailingList) {
+function filterFromRedirections(redirection) {
   return (list) => {
-    const fullRedirection = redirections.find(item => item.short === mailingList).full
-    return list.filter(item => item.from === fullRedirection)
+    return list.filter(item => item.from === redirection)
   }
 }
 
 function getSubscribers(mailingList) {
-  if (shortRedirections.indexOf(mailingList) >= 0) {
+  if (redirections.indexOf(mailingList) >= 0) {
     return getAllRedirections()
       .then(filterFromRedirections(mailingList))
       .then(list => {
@@ -108,11 +105,11 @@ function help(res) {
 function join(res, mailingList, email) {
   let subscribePromise
 
-  const isSpecial = redirections.find(item => item.short === mailingList)
+  const isSpecial = redirections.find(item => item === mailingList)
   if (isSpecial) {
     // Add redirection
     subscribePromise = ovh.requestPromised('POST', `/email/domain/beta.gouv.fr/redirection`, {
-      from: isSpecial.full,
+      from: isSpecial,
       to: email,
       localCopy: false
     })
@@ -131,7 +128,7 @@ function join(res, mailingList, email) {
 function leave(res, mailingList, email) {
   let leavePromise
 
-  if (shortRedirections.indexOf(mailingList) >= 0) {
+  if (redirections.indexOf(mailingList) >= 0) {
     // Remove redirection
     leavePromise = getAllRedirections()
       .then(findExistingRedirection(email, mailingList))

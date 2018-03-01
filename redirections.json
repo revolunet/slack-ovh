@@ -1,7 +1,7 @@
 [
-  { "short": "contact@beta", "full": "contact@beta.gouv.fr" },
-  { "short": "contact@openacademie", "full": "contact@openacademie.beta.gouv.fr" },
-  { "short": "contact@transport", "full": "contact@transport.beta.gouv.fr" },
-  { "short": "contact@aplus", "full": "contact@aplus.beta.gouv.fr" },
-  { "short": "contact@locatio", "full": "contact@locatio.beta.gouv.fr "}
+  "contact@beta.gouv.fr",
+  "contact@openacademie.beta.gouv.fr",
+  "contact@transport.beta.gouv.fr",
+  "contact@aplus.beta.gouv.fr",
+  "contact@locatio.beta.gouv.fr"
 ]
