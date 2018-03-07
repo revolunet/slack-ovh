@@ -7,16 +7,16 @@ Toute personne appartenant à l'organisation doit pouvoir:
  - obtenir la liste exhaustive et à jour des listes existantes
  - gérer son inscription à une liste
 
-Chaque modification est enregistrée dans le chan #incubateur-ops
+Chaque modification est enregistrée dans le chan `#incubateur-ops`
 
 ## Commandes
 
-```
-  - `/emails list`                                        liste des listes de diffusions existantes
-  - `/emails list nomdelaliste`                           liste des personnes dans la liste nomdelaliste
-  - `/emails join nomdelaliste nom.prenom@beta.gouv.fr`   rejoindre la liste nomdelaliste
-  - `/emails leave nomdelaliste nom.prenom@beta.gouv.fr`  quitter la liste nomdelaliste
-```
+commande                                               | description
+:------------------------------------------------------|:------------------------------------------
+`/emails list`                                         | liste des listes de diffusions existantes
+`/emails emaildelaliste`                               | liste des personnes dans la liste
+`/emails join emaildelaliste nom.prenom@beta.gouv.fr`  | rejoindre la liste
+`/emails leave emaildelaliste nom.prenom@beta.gouv.fr` | quitter la liste
 
 ## Modifier la liste des commandes dans Slack
 
