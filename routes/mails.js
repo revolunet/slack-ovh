@@ -75,13 +75,15 @@ function findExistingRedirection(email, mailingList) {
     })
 
     if (!found) {
-      throw {message: `Impossible de trouver la redirection de ${email} vers ${mailingList}`}
+      throw {message: `Impossible de trouver la redirection de ${mailingList} vers ${email}`}
     }
+
+    return found
   }
 }
 
 function removeRedirection(redirection) {
-  return ovh.requestPromised('DELETE', `/email/domain/${domain}/redirection/${redirection.id}`)
+  return ovh.requestPromised('DELETE', `/email/domain/beta.gouv.fr/redirection/${redirection.id}`)
 }
 
 function list(res, mailingList) {
