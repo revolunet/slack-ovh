@@ -1,6 +1,4 @@
 const config = require('../config')
-const descriptions = require('../descriptions')
-const redirections = require('../redirections')
 const ovh = require('ovh')(config.ovh)
 const express = require('express')
 const router = express.Router()
@@ -9,17 +7,30 @@ const verification = require('../middlewares/slack')
 const messages = require('../lib/messages')
 
 const helpMessage = `Commandes disponibles:
-  \t- \`/emails list\`\t\tliste des listes de diffusions existantes
-  \t- \`/emails list emaildelaliste\`\t\tliste des personnes dans la liste
-  \t- \`/emails join emaildelaliste nom.prenom@beta.gouv.fr\`\trejoindre la liste
-  \t- \`/emails leave emaildelaliste nom.prenom@beta.gouv.fr\`\tquitter la liste
+  \t- \`/emails list\`\t\tensemble des listes de diffusions existantes
+  \t- \`/emails list email_de_la_liste@domain.com\`\t\tpersonnes inscrites dans la liste email_de_la_liste@domain.com
+  \t- \`/emails join email_de_la_liste@domain.com email_a_ajouter@domain.com\`\tinscrire email_a_ajouter@domain.com à la liste email_de_la_liste@domain.com
+  \t- \`/emails leave email_de_la_liste@domain.com email_a_ajouter@domain.com\`\tenlever email_a_ajouter@domain.com de la liste email_de_la_liste@domain.com
 
-  Ajoutez votre liste contact ici 👉 https://github.com/betagouv/slack-ovh/blob/master/redirections.json
+  Vous pouvez ajoutez votre liste ici 👉 https://github.com/betagouv/slack-ovh/blob/master/config.js
   Plus d'infos sur https://github.com/betagouv/slack-ovh`
 
+const redirections = config.lists.reduce((acc, current) => {
+  if (!current.realMailingList) {
+    acc.push(current.id)
+  }
+
+  return acc
+}, [])
+
 function fillDescription(id) {
-  const description = descriptions[id] || 'Ajoutez votre description ici 👉 https://github.com/betagouv/slack-ovh/blob/master/descriptions.json'
-  return `*${id}*: ${description}`
+  let maillingList = config.lists.find((list) => list.id === id)
+
+  if (!maillingList) {
+    return `*${id}*: Ajoutez votre description ici 👉 https://github.com/betagouv/slack-ovh/blob/master/config.js`
+  } else {
+    return `*${id}*: ${maillingList.description}`
+  }
 }
 
 function buildLongDescription(list) {
@@ -29,7 +40,7 @@ function buildLongDescription(list) {
 }
 
 function getMailingLists() {
-  return ovh.requestPromised('GET', `/email/domain/beta.gouv.fr/mailingList`)
+  return ovh.requestPromised('GET', `/email/domain/${config.domain}/mailingList`)
     .then(list => list.concat(redirections))
     .then(buildLongDescription)
 }
@@ -51,7 +62,7 @@ function getSubscribers(mailingList) {
       })
   }
 
-  return ovh.requestPromised('GET', `/email/domain/beta.gouv.fr/mailingList/${mailingList}/subscriber`)
+  return ovh.requestPromised('GET', `/email/domain/${config.domain}/mailingList/${mailingList}/subscriber`)
     .then(list => {
       return list.reduce((acc, item) => {
         return acc + `- ${item}\n`
@@ -60,9 +71,9 @@ function getSubscribers(mailingList) {
 }
 
 function getAllRedirections() {
-  return ovh.requestPromised('GET', `/email/domain/beta.gouv.fr/redirection`)
+  return ovh.requestPromised('GET', `/email/domain/${config.domain}/redirection`)
     .then(redirectionIds => {
-      const mapper = id => ovh.requestPromised('GET', `/email/domain/beta.gouv.fr/redirection/${id}`)
+      const mapper = id => ovh.requestPromised('GET', `/email/domain/${config.domain}/redirection/${id}`)
 
       return Promise.map(redirectionIds, mapper)
     })
@@ -83,7 +94,7 @@ function findExistingRedirection(email, mailingList) {
 }
 
 function removeRedirection(redirection) {
-  return ovh.requestPromised('DELETE', `/email/domain/beta.gouv.fr/redirection/${redirection.id}`)
+  return ovh.requestPromised('DELETE', `/email/domain/${config.domain}/redirection/${redirection.id}`)
 }
 
 function list(res, mailingList) {
@@ -110,14 +121,14 @@ function join(res, mailingList, email) {
   const isSpecial = redirections.find(item => item === mailingList)
   if (isSpecial) {
     // Add redirection
-    subscribePromise = ovh.requestPromised('POST', `/email/domain/beta.gouv.fr/redirection`, {
+    subscribePromise = ovh.requestPromised('POST', `/email/domain/${config.domain}/redirection`, {
       from: isSpecial,
       to: email,
       localCopy: false
     })
   } else {
     // Subscribe from mailing-list
-    subscribePromise = ovh.requestPromised('POST', `/email/domain/beta.gouv.fr/mailingList/${mailingList}/subscriber`, { email })
+    subscribePromise = ovh.requestPromised('POST', `/email/domain/${config.domain}/mailingList/${mailingList}/subscriber`, { email })
   }
 
   const successText = `Inscription de *${email}* à la liste *${mailingList}* réussie.`
@@ -137,7 +148,7 @@ function leave(res, mailingList, email) {
       .then(removeRedirection)
   } else {
     // Unsubscribe from mailing-list
-    leavePromise = ovh.requestPromised('DELETE', `/email/domain/beta.gouv.fr/mailingList/${mailingList}/subscriber/${email}`)
+    leavePromise = ovh.requestPromised('DELETE', `/email/domain/${config.domain}/mailingList/${mailingList}/subscriber/${email}`)
   }
 
   const successText = `Désinscription de *${email}* à la liste *${mailingList}* réussie.`

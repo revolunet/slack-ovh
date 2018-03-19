@@ -7,7 +7,7 @@ Toute personne appartenant à l'organisation doit pouvoir:
  - obtenir la liste exhaustive et à jour des listes existantes
  - gérer son inscription à une liste
 
-Chaque modification est enregistrée dans le chan `#incubateur-ops`
+Chaque modification est enregistrée dans le chan `#incubateur-secretaria` (cf. config.js).
 
 ## Commandes
 
