@@ -10,9 +10,9 @@ const messages = require('../lib/messages')
 
 const helpMessage = `Commandes disponibles:
   \t- \`/emails list\`\t\tliste des listes de diffusions existantes
-  \t- \`/emails list nomdelaliste\`\t\tliste des personnes dans la liste nomdelaliste
-  \t- \`/emails join nomdelaliste nom.prenom@beta.gouv.fr\`\trejoindre la liste nomdelaliste
-  \t- \`/emails leave nomdelaliste nom.prenom@beta.gouv.fr\`\tquitter la liste nomdelaliste
+  \t- \`/emails list emaildelaliste\`\t\tliste des personnes dans la liste
+  \t- \`/emails join emaildelaliste nom.prenom@beta.gouv.fr\`\trejoindre la liste
+  \t- \`/emails leave emaildelaliste nom.prenom@beta.gouv.fr\`\tquitter la liste
 
   Ajoutez votre liste contact ici 👉 https://github.com/betagouv/slack-ovh/blob/master/redirections.json
   Plus d'infos sur https://github.com/betagouv/slack-ovh`
