@@ -75,6 +75,10 @@ const config = {
       id: "contact@lebontuteur.beta.gouv.fr",
       description: "Liste des redirections sur contact@lebontuteur.beta.gouv.fr"
     },
+    {
+      id: "contact@reso.beta.gouv.fr",
+      description: "Liste des redirections sur contact@reso.beta.gouv.fr"
+    }
   ]
 }
 
