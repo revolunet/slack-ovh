@@ -141,6 +141,7 @@ function join(res, mailingList, email) {
 function leave(res, mailingList, email) {
   let leavePromise
 
+
   if (redirections.indexOf(mailingList) >= 0) {
     // Remove redirection
     leavePromise = getAllRedirections()
