@@ -79,6 +79,10 @@ const config = {
       id: "contact@reso.beta.gouv.fr",
       description: "Liste des redirections sur contact@reso.beta.gouv.fr"
     }
+     {
+      id: "contact@emjpm.beta.gouv.fr",
+      description: "Liste des redirections sur contact@emjpm.beta.gouv.fr"
+    },
   ]
 }
 
