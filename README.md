@@ -14,7 +14,7 @@ Chaque modification est enregistrée dans le chan `#incubateur-secretaria` (cf. 
 commande                                               | description
 :------------------------------------------------------|:------------------------------------------
 `/emails list`                                         | liste des listes de diffusions existantes
-`/emails emaildelaliste`                               | liste des personnes dans la liste
+`/emails list emaildelaliste`                          | liste des personnes dans la liste
 `/emails join emaildelaliste nom.prenom@beta.gouv.fr`  | rejoindre la liste
 `/emails leave emaildelaliste nom.prenom@beta.gouv.fr` | quitter la liste
 
