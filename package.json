@@ -16,5 +16,8 @@
     "morgan": "~1.9.0",
     "ovh": "^2.0.1",
     "serve-favicon": "~2.4.5"
+  },
+  "scripts": {
+    "test": "node tests/config.spec"
   }
 }
