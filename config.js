@@ -32,7 +32,6 @@ const config = {
       id: "contact@adock.beta.gouv.fr",
       description: "Liste des redirections sur contact@adock.beta.gouv.fr"
     },
-
     {
       id: "contact@aplus.beta.gouv.fr",
       description: "Liste des redirections sur contact@aplus.beta.gouv.fr"
