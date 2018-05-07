@@ -73,6 +73,11 @@ const config = {
       description: "Liste des redirections sur transport.beta.gouv.fr"
     },
     {
+      id: "dinsic",
+      description: "Rares éléments administratifs nécessitant un lien contractuel (fiches de paie, gestion des ordres de mission…).",
+      realMailingList: true
+    },
+    {
       id: "incubateur",
       description: "Tous les membres ayant un contrat en cours sur beta.gouv.fr/communaute",
       realMailingList: true
@@ -85,11 +90,6 @@ const config = {
     {
       id: "recrutement@beta.gouv.fr",
       description: "Tous les recrutements de beta.gouv.fr"
-    },
-    {
-      id: "sgmap",
-      description: "Rares éléments administratifs nécessitant un lien contractuel (fiches de paie, gestion des ordres de mission…).",
-      realMailingList: true
     }
   ]
 }
