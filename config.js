@@ -45,6 +45,10 @@ const config = {
       description: "L'équipe du code du travail numérique"
     },
     {
+      id: "contact@dossiersco.beta.gouv.fr",
+      description: "L'équipe DossierSCO"
+    },
+    {
       id: "contact@emjpm.beta.gouv.fr",
       description: "Liste des redirections sur contact@emjpm.beta.gouv.fr"
     },
