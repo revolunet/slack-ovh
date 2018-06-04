@@ -77,6 +77,10 @@ const config = {
       description: "Liste des redirections sur transport.beta.gouv.fr"
     },
     {
+      id: "contact@zam.beta.gouv.fr",
+      description: "Toute demande entrante pour Zam",
+    },
+    {
       id: "dinsic",
       description: "Rares éléments administratifs nécessitant un lien contractuel (fiches de paie, gestion des ordres de mission…).",
       realMailingList: true
