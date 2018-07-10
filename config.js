@@ -49,6 +49,10 @@ const config = {
       description: "L'équipe DossierSCO"
     },
     {
+      id: "contact@embauche.beta.gouv.fr",
+      description: "Toute demande entrante pour embauche.beta.gouv.fr",
+    },
+    {
       id: "contact@emjpm.beta.gouv.fr",
       description: "Liste des redirections sur contact@emjpm.beta.gouv.fr"
     },
@@ -98,10 +102,6 @@ const config = {
     {
       id: "recrutement@beta.gouv.fr",
       description: "Tous les recrutements de beta.gouv.fr"
-    },
-     {
-      id: "contact@embauche.beta.gouv.fr",
-      description: "Toute demande entrante pour embauche.beta.gouv.fr",
     }
   ]
 }
