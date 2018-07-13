@@ -45,6 +45,10 @@ const config = {
       description: "L'équipe du code du travail numérique"
     },
     {
+      id: "contact@civils-de-la-defense.beta.gouv.fr",
+      description: "Liste de diffusion pour l'équipe Civils de la défense"
+    },
+    {
       id: "contact@dossiersco.beta.gouv.fr",
       description: "L'équipe DossierSCO"
     },
