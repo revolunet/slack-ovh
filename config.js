@@ -41,12 +41,12 @@ const config = {
       description: "Liste des contacts sur beta.gouv.fr"
     },
     {
-      id: "contact@code-du-travail.beta.gouv.fr",
-      description: "L'équipe du code du travail numérique"
-    },
-    {
       id: "contact@civils-de-la-defense.beta.gouv.fr",
       description: "Liste de diffusion pour l'équipe Civils de la défense"
+    },
+    {
+      id: "contact@code-du-travail.beta.gouv.fr",
+      description: "L'équipe du code du travail numérique"
     },
     {
       id: "contact@dossiersco.beta.gouv.fr",
