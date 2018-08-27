@@ -77,6 +77,10 @@ const config = {
       description: "Liste des redirections sur contact@reso.beta.gouv.fr"
     },
     {
+      id: "contact@signalement.beta.gouv.fr",
+      description: "Liste des redirections sur contact@signalement.beta.gouv.fr"
+    },
+    {
       id: "contact@signaux-faibles.beta.gouv.fr",
       description: "Liste des redirections sur contact@signaux-faibles.beta.gouv.fr"
     },
