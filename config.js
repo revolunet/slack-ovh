@@ -49,6 +49,10 @@ const config = {
       description: "L'équipe du code du travail numérique"
     },
     {
+      id: "contact@covoiturage.beta.gouv.fr",
+      description: "L'équipe de la preuve de covoiturage"
+    },
+    {
       id: "contact@dossiersco.beta.gouv.fr",
       description: "L'équipe DossierSCO"
     },
