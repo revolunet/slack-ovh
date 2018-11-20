@@ -93,6 +93,10 @@ const config = {
       description: "Liste des redirections sur transport.beta.gouv.fr"
     },
     {
+      id: "contact@voir-et-localiser.beta.gouv.fr",
+      description: "Toute demande entrante pour Voir et Localiser",
+    },
+    {
       id: "contact@zam.beta.gouv.fr",
       description: "Toute demande entrante pour Zam",
     },
