@@ -97,6 +97,10 @@ const config = {
       description: "Toute demande entrante pour Voir et Localiser",
     },
     {
+      id: "contact@mobilot.beta.gouv.fr",
+      description: "Toute demande entrante pour Mobilot",
+    },
+    {
       id: "contact@zam.beta.gouv.fr",
       description: "Toute demande entrante pour Zam",
     },
