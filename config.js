@@ -73,6 +73,10 @@ const config = {
       description: "Liste des redirections sur contact@locatio.beta.gouv.fr"
     },
     {
+      id: "contact@mobilot.beta.gouv.fr",
+      description: "Toute demande entrante pour Mobilot",
+    },
+    {
       id: "contact@openacademie.beta.gouv.fr",
       description: "Des solutions numériques pour l’administration scolaire, openacademie.beta.gouv.fr"
     },
@@ -95,10 +99,6 @@ const config = {
     {
       id: "contact@voir-et-localiser.beta.gouv.fr",
       description: "Toute demande entrante pour Voir et Localiser",
-    },
-    {
-      id: "contact@mobilot.beta.gouv.fr",
-      description: "Toute demande entrante pour Mobilot",
     },
     {
       id: "contact@zam.beta.gouv.fr",
