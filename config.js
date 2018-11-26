@@ -120,6 +120,10 @@ const config = {
       realMailingList: true
     },
     {
+      id: "passculture-bizdev@beta.gouv.fr",
+      description: "Les bizdevs du pass culture"
+    },
+    {
       id: "recrutement@beta.gouv.fr",
       description: "Tous les recrutements de beta.gouv.fr"
     }
