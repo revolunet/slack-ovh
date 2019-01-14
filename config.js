@@ -65,6 +65,10 @@ const config = {
       description: "Liste des redirections sur contact@emjpm.beta.gouv.fr"
     },
     {
+      id: "contact@filharmonic.beta.gouv.fr",
+      description: "Liste des redirections sur contact@filharmonic.beta.gouv.fr"
+    },
+    {
       id: "contact@lebontuteur.beta.gouv.fr",
       description: "Liste des redirections sur contact@lebontuteur.beta.gouv.fr"
     },
