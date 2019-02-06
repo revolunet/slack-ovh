@@ -109,6 +109,10 @@ const config = {
       description: "Toute demande entrante pour Zam",
     },
     {
+      id: "deploiement@transport.beta.gouv.fr",
+      description: "Liste pour les bizdev transport.data.gouv.fr "
+    },
+    {
       id: "dinsic",
       description: "Rares éléments administratifs nécessitant un lien contractuel (fiches de paie, gestion des ordres de mission…).",
       realMailingList: true
