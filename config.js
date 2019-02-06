@@ -109,7 +109,7 @@ const config = {
       description: "Toute demande entrante pour Zam",
     },
     {
-      id: "déploiement@transport.beta.gouv.fr",
+      id: "deploiement@transport.beta.gouv.fr",
       description: "Liste pour les bizdev transport.data.gouv.fr "
     },
     {
