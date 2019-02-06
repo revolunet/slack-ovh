@@ -101,6 +101,10 @@ const config = {
       description: "Liste des redirections sur transport.beta.gouv.fr"
     },
     {
+      id: "déploiement@transport.beta.gouv.fr",
+      description: "Liste pour les bizdev transport.data.gouv.fr "
+    },
+    {
       id: "contact@voir-et-localiser.beta.gouv.fr",
       description: "Toute demande entrante pour Voir et Localiser",
     },
