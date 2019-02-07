@@ -81,6 +81,10 @@ const config = {
       description: "Toute demande entrante pour Mobilot",
     },
     {
+      id: "contact@mon-entreprise.beta.gouv.fr",
+      description: "Toute demande entrante pour mon-entreprise.fr",
+    },
+    {
       id: "contact@openacademie.beta.gouv.fr",
       description: "Des solutions numériques pour l’administration scolaire, openacademie.beta.gouv.fr"
     },
