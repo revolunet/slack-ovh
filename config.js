@@ -93,6 +93,10 @@ const config = {
       description: "Liste des redirections sur contact@reso.beta.gouv.fr"
     },
     {
+      id: "contact@signalconso.beta.gouv.fr",
+      description: "L'équipe SignalConso (ex-Signalement)"
+    },
+    {
       id: "contact@signalement.beta.gouv.fr",
       description: "Liste des redirections sur contact@signalement.beta.gouv.fr"
     },
