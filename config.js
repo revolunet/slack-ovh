@@ -113,6 +113,10 @@ const config = {
       description: "Toute demande entrante pour Voir et Localiser",
     },
     {
+      id: "contact@workinfrance.beta.gouv.fr",
+      description: "Liste des redirections pour contact et support de l'équipe sur contact@workinfrance.beta.gouv.fr"
+    },
+    {
       id: "contact@zam.beta.gouv.fr",
       description: "Toute demande entrante pour Zam",
     },
