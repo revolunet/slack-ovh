@@ -53,6 +53,10 @@ const config = {
       description: "L'équipe de la preuve de covoiturage"
     },
     {
+      id: "contact@domifa.beta.gouv.fr",
+      description: "L'équipe DomiFa"
+    },
+    {
       id: "contact@dossiersco.beta.gouv.fr",
       description: "L'équipe DossierSCO"
     },
