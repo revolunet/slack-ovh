@@ -113,6 +113,10 @@ const config = {
       description: "Liste des redirections sur transport.beta.gouv.fr"
     },
     {
+      id: "contact@tremplin.beta.gouv.fr",
+      description: "L'équipe Tremplin"
+    },
+    {
       id: "contact@voir-et-localiser.beta.gouv.fr",
       description: "Toute demande entrante pour Voir et Localiser",
     },
