@@ -73,6 +73,10 @@ const config = {
       description: "Liste des redirections sur contact@filharmonic.beta.gouv.fr"
     },
     {
+      id: "contact@fluctuat.beta.gouv.fr",
+      description: "Liste des redirections sur contact@fluctuat.beta.gouv.fr"
+    },
+    {
       id: "contact@lebontuteur.beta.gouv.fr",
       description: "Liste des redirections sur contact@lebontuteur.beta.gouv.fr"
     },
