@@ -53,6 +53,10 @@ const config = {
       description: "L'équipe de la preuve de covoiturage"
     },
     {
+      id: "contact@domifa.beta.gouv.fr",
+      description: "L'équipe DomiFa"
+    },
+    {
       id: "contact@dossiersco.beta.gouv.fr",
       description: "L'équipe DossierSCO"
     },
@@ -111,6 +115,10 @@ const config = {
     {
       id: "contact@transport.beta.gouv.fr",
       description: "Liste des redirections sur transport.beta.gouv.fr"
+    },
+    {
+      id: "contact@tremplin.beta.gouv.fr",
+      description: "L'équipe Tremplin"
     },
     {
       id: "contact@voir-et-localiser.beta.gouv.fr",
