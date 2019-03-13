@@ -29,6 +29,10 @@ const config = {
       realMailingList: true
     },
     {
+      id: "contact@action-bidonvilles.beta.gouv.fr",
+      description: "L'équipe de la startup Action bidonvilles"
+    },
+    {
       id: "contact@adock.beta.gouv.fr",
       description: "Liste des redirections sur contact@adock.beta.gouv.fr"
     },
