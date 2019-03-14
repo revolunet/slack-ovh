@@ -101,6 +101,10 @@ const config = {
       description: "Des solutions numériques pour l’administration scolaire, openacademie.beta.gouv.fr"
     },
     {
+      id: "contact@place-des-entreprises.beta.gouv.fr",
+      description: "Liste des redirections sur contact@place-des-entreprises.beta.gouv.fr"
+    },
+    {
       id: "contact@reso.beta.gouv.fr",
       description: "Liste des redirections sur contact@reso.beta.gouv.fr"
     },
