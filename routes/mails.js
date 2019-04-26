@@ -164,7 +164,7 @@ router.post('/', verification, function(req, res, next) {
     return help(res)
   }
 
-  let [ cmd, mailingList, email ] = req.body.text.split(' ')
+  let [ cmd, mailingList, email ] = req.body.text.replace(/\s\s+/g, " ").trim().split(" ")
 
   switch(cmd) {
     case 'join':
