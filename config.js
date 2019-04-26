@@ -19,6 +19,10 @@ const config = {
       realMailingList: true
     },
     {
+      id: "codedutravail@beta.gouv.fr",
+      description: "Equipe code du travail numérique"
+    },
+    {
       id: "compta",
       description: "Achats, facturation, refacturation...",
       realMailingList: true
@@ -166,10 +170,6 @@ const config = {
     {
       id: "recrutement@beta.gouv.fr",
       description: "Tous les recrutements de beta.gouv.fr"
-    },
-    {
-      id: "codedutravail@beta.gouv.fr",
-      description: "Equipe code du travail numérique"
     }
   ]
 }
