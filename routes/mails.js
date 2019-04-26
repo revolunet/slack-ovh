@@ -201,7 +201,7 @@ router.post("/", verification, function(req, res, next) {
   }
 
   console.log("Received command: " + req.body.text);
-  let [cmd, mailingList, email] = req.body.text.split(" ");
+  let [cmd, mailingList, email] = req.body.text.replace(/\s\s+/g, " ").trim().split(" ")
 
   switch (cmd) {
     case "join":
