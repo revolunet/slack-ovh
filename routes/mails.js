@@ -1,10 +1,10 @@
-const config = require('../config')
-const ovh = require('ovh')(config.ovh)
-const express = require('express')
-const router = express.Router()
-const Promise = require('bluebird')
-const verification = require('../middlewares/slack')
-const messages = require('../lib/messages')
+const config = require("../config");
+const ovh = require("ovh")(config.ovh);
+const express = require("express");
+const router = express.Router();
+const Promise = require("bluebird");
+const verification = require("../middlewares/slack");
+const messages = require("../lib/messages");
 
 const helpMessage = `Commandes disponibles:
   \t- \`/emails list\`\t\tensemble des listes de diffusions existantes
@@ -13,169 +13,210 @@ const helpMessage = `Commandes disponibles:
   \t- \`/emails leave email_de_la_liste@domain.com email_a_ajouter@domain.com\`\tenlever email_a_ajouter@domain.com de la liste email_de_la_liste@domain.com
 
   Vous pouvez ajoutez votre liste ici 👉 https://github.com/betagouv/slack-ovh/blob/master/config.js
-  Plus d'infos sur https://github.com/betagouv/slack-ovh`
+  Plus d'infos sur https://github.com/betagouv/slack-ovh`;
 
 const redirections = config.lists.reduce((acc, current) => {
   if (!current.realMailingList) {
-    acc.push(current.id)
+    acc.push(current.id);
   }
 
-  return acc
-}, [])
+  return acc;
+}, []);
+
+function printAndReturnError(err, res) {
+  console.log(err);
+  if (res) {
+    return res.send(messages.error(err));
+  }
+}
 
 function fillDescription(id) {
-  let maillingList = config.lists.find((list) => list.id === id)
+  let maillingList = config.lists.find(list => list.id === id);
 
   if (!maillingList) {
-    return `*${id}*: Ajoutez votre description ici 👉 https://github.com/betagouv/slack-ovh/blob/master/config.js`
+    return `*${id}*: Ajoutez votre description ici 👉 https://github.com/betagouv/slack-ovh/blob/master/config.js`;
   } else {
-    return `*${id}*: ${maillingList.description}`
+    return `*${id}*: ${maillingList.description}`;
   }
 }
 
 function buildLongDescription(list) {
   return list.reduce((acc, item) => {
-    return acc + `- ${fillDescription(item)}\n`
-  }, 'Listes de diffusions existantes:\n')
+    return acc + `- ${fillDescription(item)}\n`;
+  }, "Listes de diffusions existantes:\n");
 }
 
 function getMailingLists() {
-  return ovh.requestPromised('GET', `/email/domain/${config.domain}/mailingList`)
+  return ovh
+    .requestPromised("GET", `/email/domain/${config.domain}/mailingList`)
     .then(list => list.concat(redirections))
     .then(buildLongDescription)
-}
-
-function filterFromRedirections(redirection) {
-  return (list) => {
-    return list.filter(item => item.from === redirection)
-  }
+    .catch(printAndReturnError);
 }
 
 function getSubscribers(mailingList) {
   if (redirections.indexOf(mailingList) >= 0) {
-    return getAllRedirections()
-      .then(filterFromRedirections(mailingList))
+    return getRedirections(mailingList)
       .then(list => {
         return list.reduce((acc, item) => {
-          return acc + `- ${item.to}\n`
-        }, `Personnes inscrites à ${mailingList}:\n`)
+          return acc + `- ${item.to}\n`;
+        }, `Personnes inscrites à ${mailingList}:\n`);
       })
+      .catch(printAndReturnError);
   }
 
-  return ovh.requestPromised('GET', `/email/domain/${config.domain}/mailingList/${mailingList}/subscriber`)
+  return ovh
+    .requestPromised(
+      "GET",
+      `/email/domain/${config.domain}/mailingList/${mailingList}/subscriber`
+    )
     .then(list => {
       return list.reduce((acc, item) => {
-        return acc + `- ${item}\n`
-      }, `Personnes inscrites à ${mailingList}:\n`)
+        return acc + `- ${item}\n`;
+      }, `Personnes inscrites à ${mailingList}:\n`);
     })
+    .catch(printAndReturnError);
 }
 
-function getAllRedirections() {
-  return ovh.requestPromised('GET', `/email/domain/${config.domain}/redirection`)
-    .then(redirectionIds => {
-      const mapper = id => ovh.requestPromised('GET', `/email/domain/${config.domain}/redirection/${id}`)
-
-      return Promise.map(redirectionIds, mapper)
+function getRedirections(mailingList) {
+  return ovh
+    .requestPromised("GET", `/email/domain/${config.domain}/redirection`, {
+      from: `${mailingList}`
     })
+    .then(redirectionIds => {
+      const mapper = id =>
+        ovh
+          .requestPromised(
+            "GET",
+            `/email/domain/${config.domain}/redirection/${id}`
+          )
+          .catch(printAndReturnError);
+
+      return Promise.map(redirectionIds, mapper);
+    })
+    .catch(printAndReturnError);
 }
 
 function findExistingRedirection(email, mailingList) {
-  return (list) => {
+  return list => {
     const found = list.find(redirection => {
-      return redirection.from === mailingList && redirection.to === email
-    })
+      return redirection.from === mailingList && redirection.to === email;
+    });
 
     if (!found) {
-      throw {message: `Impossible de trouver la redirection de ${mailingList} vers ${email}`}
+      throw {
+        message: `Impossible de trouver la redirection de ${mailingList} vers ${email}`
+      };
     }
 
-    return found
-  }
+    return found;
+  };
 }
 
 function removeRedirection(redirection) {
-  return ovh.requestPromised('DELETE', `/email/domain/${config.domain}/redirection/${redirection.id}`)
+  return ovh.requestPromised(
+    "DELETE",
+    `/email/domain/${config.domain}/redirection/${redirection.id}`
+  );
 }
 
 function list(res, mailingList) {
-  let getListPromise
+  let getListPromise;
 
   if (mailingList) {
-    getListPromise = getSubscribers(mailingList)
+    getListPromise = getSubscribers(mailingList);
   } else {
-    getListPromise = getMailingLists()
+    getListPromise = getMailingLists();
   }
 
   return getListPromise
     .then(text => res.send(messages.ephemeral(text)))
-    .catch(err => res.send(messages.error(err)))
+    .catch(err => printAndReturnError(err, res));
 }
 
 function help(res) {
-  return res.send(messages.ephemeral(helpMessage))
+  return res.send(messages.ephemeral(helpMessage));
 }
 
 function join(res, mailingList, email) {
-  let subscribePromise
+  let subscribePromise;
 
-  const isSpecial = redirections.find(item => item === mailingList)
+  const isSpecial = redirections.find(item => item === mailingList);
   if (isSpecial) {
     // Add redirection
-    subscribePromise = ovh.requestPromised('POST', `/email/domain/${config.domain}/redirection`, {
-      from: isSpecial,
-      to: email,
-      localCopy: false
-    })
+    console.log(
+      `${mailingList} is not an OVH mailing-list, adding redirection`
+    );
+    subscribePromise = ovh
+      .requestPromised("POST", `/email/domain/${config.domain}/redirection`, {
+        from: isSpecial,
+        to: email,
+        localCopy: false
+      })
+      .catch(err => res.send(messages.error(err)));
   } else {
     // Subscribe from mailing-list
-    subscribePromise = ovh.requestPromised('POST', `/email/domain/${config.domain}/mailingList/${mailingList}/subscriber`, { email })
+    subscribePromise = ovh
+      .requestPromised(
+        "POST",
+        `/email/domain/${config.domain}/mailingList/${mailingList}/subscriber`,
+        { email }
+      )
+      .catch(err => printAndReturnError(err, res));
   }
 
-  const successText = `Inscription de *${email}* à la liste *${mailingList}* réussie.`
+  const successText = `Inscription de *${email}* à la liste *${mailingList}* réussie.`;
 
   return subscribePromise
     .then(() => res.send(messages.inChannel(successText)))
-    .catch(err => res.send(messages.error(err)))
+    .catch(err => printAndReturnError(err, res));
 }
 
 function leave(res, mailingList, email) {
-  let leavePromise
-
+  let leavePromise;
 
   if (redirections.indexOf(mailingList) >= 0) {
     // Remove redirection
-    leavePromise = getAllRedirections()
-      .then(findExistingRedirection(email, mailingList))
-      .then(removeRedirection)
+    leavePromise = getRedirections(mailingList).then(removeRedirection);
   } else {
     // Unsubscribe from mailing-list
-    leavePromise = ovh.requestPromised('DELETE', `/email/domain/${config.domain}/mailingList/${mailingList}/subscriber/${email}`)
+    leavePromise = ovh.requestPromised(
+      "DELETE",
+      `/email/domain/${
+        config.domain
+      }/mailingList/${mailingList}/subscriber/${email}`
+    );
   }
 
-  const successText = `Désinscription de *${email}* à la liste *${mailingList}* réussie.`
+  const successText = `Désinscription de *${email}* à la liste *${mailingList}* réussie.`;
 
   return leavePromise
     .then(() => res.send(messages.inChannel(successText)))
-    .catch(err => res.send(messages.error(err)))
+    .catch(err => printAndReturnError(err, res));
 }
 
-router.post('/', verification, function(req, res, next) {
+router.post("/", verification, function(req, res, next) {
   if (!req.body || !req.body.text) {
-    return help(res)
+    return help(res);
   }
 
-  let [ cmd, mailingList, email ] = req.body.text.replace(/\s\s+/g, " ").trim().split(" ")
+  console.log("Received command: " + req.body.text);
+  let [cmd, mailingList, email] = req.body.text.replace(/\s\s+/g, " ").trim().split(" ")
 
-  switch(cmd) {
-    case 'join':
-      return join(res, mailingList, email)
-    case 'leave':
-      return leave(res, mailingList, email)
-    case 'list':
-      return list(res, mailingList)
+  switch (cmd) {
+    case "join":
+      console.log("Interpreted command as `join`");
+      return join(res, mailingList, email);
+    case "leave":
+      console.log("Interpreted command as `leave`");
+      return leave(res, mailingList, email);
+    case "list":
+      console.log("Interpreted command as `list`");
+      return list(res, mailingList);
     default:
-      return help(res)
+      console.log("Command unknown, returning help");
+      return help(res);
   }
-})
+});
 
-module.exports = router
+module.exports = router;
